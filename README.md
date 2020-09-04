@@ -13,7 +13,12 @@
 
 `npm i react-native-amplitude-analytics --save`
 
-#### iOS installation
+For react-native > 0.60 the installation should be automated, for older versions expand and read the Manual installation section below.
+
+<details>
+<summary>Manual installation steps</summary>
+	
+#### Manual iOS installation
 
 1. `react-native link react-native-amplitude-analytics`
 After you do that make sure that:
@@ -66,6 +71,7 @@ After you do that make sure that:
   	```
   	<uses-permission android:name="android.permission.INTERNET" />
   	```
+</details>
 
 ## Usage 
 
@@ -105,7 +111,20 @@ class testApp extends Component {
 	 
     // log revenue
     amplitude.logRevenue(productIdentifier, quantity, amount)
-	 
+
+    /**
+      *  RevenueProperties {
+      *    productId?: string;
+      *    quantity?: number; //default = 1
+      *    price: number;
+      *    revenueType?: string;
+      *    receipt?: string;
+      *    receiptSignature?: string;
+      *    eventProperties?: {[key: string]: any},
+      *  }
+      */
+    amplitude.logRevenueV2(revenueProperties)
+
     // add to user property
     amplitude.addToUserProperty(property, amount)
 

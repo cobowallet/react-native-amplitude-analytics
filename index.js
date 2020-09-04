@@ -77,6 +77,14 @@ class Amplitude {
     }
   }
 
+  setDeviceId(deviceId) {
+    if (amplitudeHasInitialized) {
+      return RNAmplitudeSDK.setDeviceId(deviceId ? deviceId.toString() : null);
+    } else {
+      throw new Error('You called Amplitude.setDeviceId before initializing it. Run new Amplitute(key) first.');
+    }
+  }
+
   regenerateDeviceId() {
     if (amplitudeHasInitialized) {
       return RNAmplitudeSDK.regenerateDeviceId();
@@ -131,6 +139,14 @@ class Amplitude {
       } else {
         return RNAmplitudeSDK.logRevenue(productIdentifier, quantity, amount);
       }
+    } else {
+      throw new Error('You called Amplitude.logRevenue before initializing it. Run new Amplitute(key) first.');
+    }
+  }
+
+  logRevenueV2(properties = {}) {
+    if (amplitudeHasInitialized) {
+      return RNAmplitudeSDK.logRevenueV2(properties);
     } else {
       throw new Error('You called Amplitude.logRevenue before initializing it. Run new Amplitute(key) first.');
     }

@@ -37,6 +37,11 @@ RCT_REMAP_METHOD(getDeviceId, getDeviceIdWithResolver:(RCTPromiseResolveBlock)re
     resolve(deviceId);
 }
 
+RCT_EXPORT_METHOD(setDeviceId:(NSString *)deviceId)
+{
+     [[Amplitude instance] setDeviceId: deviceId];
+}
+
 RCT_EXPORT_METHOD(regenerateDeviceId)
 {
      [[Amplitude instance] regenerateDeviceId];
@@ -63,6 +68,23 @@ RCT_EXPORT_METHOD(logRevenue:(NSString *)productIdentifier quantity:(int)quantit
      [revenue setPrice:[NSNumber numberWithDouble:price]];
      [revenue setReceipt:[receipt dataUsingEncoding:NSUTF8StringEncoding]];
      [[Amplitude instance] logRevenueV2:revenue];
+}
+
+RCT_EXPORT_METHOD(logRevenueV2:(NSDictionary *)properties)
+{
+    NSString *productId = [properties valueForKey:@"productId"];
+    NSNumber *quantityObj = [properties valueForKey:@"quantity"];
+    NSInteger quantity = quantityObj ? [quantityObj integerValue] : 1;
+    NSNumber *price = [properties valueForKey:@"price"];
+    NSString *receipt = [properties valueForKey:@"receipt"];
+    NSString *revenueType = [properties valueForKey:@"revenueType"];
+    NSDictionary *eventProperties = [properties valueForKey:@"eventProperties"];
+    AMPRevenue *revenue = [[[AMPRevenue revenue] setProductIdentifier:productId] setQuantity:quantity];
+    [revenue setPrice:price];
+    [revenue setReceipt:[receipt dataUsingEncoding:NSUTF8StringEncoding]];
+    [revenue setRevenueType:revenueType];
+    [revenue setEventProperties:eventProperties];
+    [[Amplitude instance] logRevenueV2:revenue];
 }
 
 RCT_EXPORT_METHOD(addToUserProperty:(NSString *)property value:(int)value)
